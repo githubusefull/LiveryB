@@ -3,8 +3,10 @@
     "builds": [
         { "src": "api/*.js", "use": "@vercel/node" }
     ],
+   
     "routes": [
-        { "src": "/auth", "dest": "api/auth.js" },
-        { "src": "/order", "dest": "api/order.js" }
-    ]
+    { "src": "/auth/(.*)", "dest": "api/auth.js" },
+    { "src": "/order/(.*)", "dest": "api/order.js" }
+]
+
 }
