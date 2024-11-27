@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const Auth = require('./routers/Auth'); // Import the user routes
-const Order = require('./routers/NewOrder'); // Import the user routes
+const Auth = require('./api/routers/Auth'); // Import the user routes
+const Order = require('./api/routers/NewOrder'); // Import the user routes
 const serverless = require('serverless-http'); // Import serverless-http
 
 dotenv.config(); // Load environment variables from .env file
