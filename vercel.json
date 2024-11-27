@@ -4,9 +4,10 @@
       { "src": "api/auth.js", "use": "@vercel/node" },
       { "src": "api/order.js", "use": "@vercel/node" }
     ],
-    "routes": [
-      { "src": "/auth/(.*)", "dest": "api/auth.js" },
-      { "src": "/order/(.*)", "dest": "api/order.js" }
-    ]
+   "routes": [
+  { "src": "/auth/(.*)", "dest": "api/auth.js" },
+  { "src": "/order/(.*)", "dest": "api/order.js" }
+]
+
   }
   
