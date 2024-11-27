@@ -35,9 +35,7 @@ app.use('/auth', Auth);
 app.use('/order', Order);
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+
 
 
 module.exports = serverless(app);
