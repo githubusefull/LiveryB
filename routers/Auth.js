@@ -32,6 +32,17 @@ router.post('/register', async (req, res) => {
   }
 });
 
+
+router.get('/register', async (req, res) => {
+  try {
+    const users = await User.find(); // Retrieve all users from the database
+    res.json(users); // Send users as a JSON response
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
 // Login the user
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;

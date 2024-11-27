@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const Auth = require('./routers/Auth'); // Import the user routes
 const Order = require('./routers/NewOrder'); // Import the user routes
+const serverless = require('serverless-http'); // Import serverless-http
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -37,3 +38,6 @@ app.use('/order', Order);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+module.exports = serverless(app);
