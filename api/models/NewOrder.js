@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Define a schema with the specified fields
 const userSchema = new mongoose.Schema({
@@ -31,4 +31,5 @@ const userSchema = new mongoose.Schema({
 
 const NewOrder = mongoose.model('NewOrder', userSchema);
 
-module.exports = NewOrder;
+export default NewOrder;
+

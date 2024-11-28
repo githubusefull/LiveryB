@@ -1,9 +1,9 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-const Auth = require('./api/routers/Auth'); // Import the user routes
-const Order = require('./api/routers/NewOrder'); // Import the user routes
+import express from 'express';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import Auth from './api/routers/Auth.js'; // Ensure the file extension is included
+import Order from './api/routers/NewOrder.js'; // Ensure the file extension is included
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -16,19 +16,22 @@ app.use(bodyParser.json()); // Middleware to parse incoming JSON requests
 // Connect to MongoDB using the URL from .env
 const mongodbUri = process.env.MONGODB_URI;
 if (!mongodbUri) {
-  console.log('MongoDB URI not found in .env file');
+  console.error('MongoDB URI not found in .env file');
   process.exit(1); // Exit if the URI is missing
 }
 
-mongoose.connect(mongodbUri, {
-  serverSelectionTimeoutMS: 10000
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.log('Error connecting to MongoDB:', err);
-});
+mongoose
+  .connect(mongodbUri, {
+    serverSelectionTimeoutMS: 10000,
+  })
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
 
-// Use the userRouter for the '/users' endpoint
+// Use the userRouter for the '/auth' and '/order' endpoints
 app.use('/auth', Auth);
 app.use('/order', Order);
 
@@ -37,5 +40,4 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-
-module.exports = app;
+export default app;

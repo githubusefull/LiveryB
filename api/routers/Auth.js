@@ -1,6 +1,7 @@
-const express = require('express');
-const User = require('../models/Users'); // Import the User model
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import User from '../models/Users.js'; // Add the .js extension for ES module compatibility
+import jwt from 'jsonwebtoken';
+
 const router = express.Router();
 
 // Register a new user
@@ -25,14 +26,13 @@ router.post('/register', async (req, res) => {
       email: savedUser.email,
       mobile: savedUser.mobile,
       role: savedUser.role,
-
     });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
-
+// Retrieve all users
 router.get('/register', async (req, res) => {
   try {
     const users = await User.find(); // Retrieve all users from the database
@@ -41,7 +41,6 @@ router.get('/register', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
 
 // Login the user
 router.post('/login', async (req, res) => {
@@ -60,9 +59,14 @@ router.post('/login', async (req, res) => {
   }
 
   // Generate JWT token
-  const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '30d' });
+  const token = jwt.sign(
+    { id: user._id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: '30d' }
+  );
 
   res.json({ token });
 });
 
-module.exports = router;
+export default router;
+
