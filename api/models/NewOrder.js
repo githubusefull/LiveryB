@@ -26,7 +26,15 @@ const userSchema = new mongoose.Schema({
   To: {
     type: String,
     required: true,
-  }
+  },
+
+  status: {
+    type: String,
+   
+    },
+  driverName:  {
+      type: String } 
+    
 });
 
 const NewOrder = mongoose.model('NewOrder', userSchema);

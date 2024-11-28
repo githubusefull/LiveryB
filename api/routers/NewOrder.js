@@ -15,7 +15,7 @@ router.get('/create', async (req, res) => {
 
 // POST: Create a new order
 router.post('/create', async (req, res) => {
-  const { phoneNumber, address, quantity, boxType, From, To } = req.body;
+  const { phoneNumber, address, quantity, boxType, From, To, status, driverName } = req.body;
 
   const newOrder = new NewOrder({
     phoneNumber,
@@ -24,6 +24,8 @@ router.post('/create', async (req, res) => {
     boxType,
     From,
     To,
+    status,
+    driverName
   });
 
   try {
