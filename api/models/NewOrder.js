@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 // Define a schema with the specified fields
 const userSchema = new mongoose.Schema({
+ 
+  userId: {
+    type: String,
+  },
   phoneNumber: {
     type: String,
     required: true,
