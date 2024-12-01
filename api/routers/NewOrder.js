@@ -14,19 +14,30 @@ router.get('/create', async (req, res) => {
 });
 
 // POST: Create a new order
+// POST: Create a new order
 router.post('/create', async (req, res) => {
-  const {userId, phoneNumber, address, quantity, boxType, From, To, status, driverName } = req.body;
+  const { 
+    userId, 
+    mobile, 
+    address, 
+    quantity, 
+    boxType, 
+    From, 
+    To, 
+    status, 
+    driverInfo // Expecting an array of objects for driverInfo
+  } = req.body;
 
   const newOrder = new NewOrder({
     userId,
-    phoneNumber,
+    mobile,
     address,
     quantity,
     boxType,
     From,
     To,
     status,
-    driverName
+    driverInfo, // Directly assign driverInfo from the request body
   });
 
   try {
@@ -34,6 +45,37 @@ router.post('/create', async (req, res) => {
     res.status(201).json(savedOrder); // Send the created order as a JSON response
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+
+router.put('/create/:id', async (req, res) => {
+  const { id } = req.params; // Order ID
+  const { driverId, name, mobile } = req.body; // Driver information
+
+  if (!driverId || !name || !mobile) {
+    return res.status(400).json({ message: 'Driver information is incomplete.' });
+  }
+
+  try {
+    // Use $push to add a new driver to the driverInfo array
+    const updatedOrder = await NewOrder.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          driverInfo: { driverId, name, mobile },
+        },
+      },
+      { new: true, runValidators: true } // Return the updated document
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found.' });
+    }
+
+    res.status(200).json({ message: 'Driver added successfully.', data: updatedOrder });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating driver info.', error: error.message });
   }
 });
 

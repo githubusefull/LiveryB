@@ -1,12 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-// Define a schema with the specified fields
 const userSchema = new mongoose.Schema({
- 
   userId: {
     type: String,
   },
-  phoneNumber: {
+  mobile: {
     type: String,
     required: true,
   },
@@ -31,17 +29,23 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   status: {
     type: String,
-   
+  },
+  driverInfo:
+  
+  [
+    {
+      driverId: { type: String },
+      name: { type: String },
+      mobile: { type: String },
+      _id : false,
+
     },
-  driverName:  {
-      type: String } 
-    
+  ]
+
 });
 
 const NewOrder = mongoose.model('NewOrder', userSchema);
 
 export default NewOrder;
-
