@@ -1,7 +1,7 @@
 import express from 'express';
 import User from '../models/Users.js'; // Ensure the schema has a password hashing middleware
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
