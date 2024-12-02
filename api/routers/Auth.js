@@ -1,7 +1,7 @@
 import express from 'express';
 import User from '../models/Users.js'; // Ensure the schema has a password hashing middleware
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -66,8 +66,15 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid Email' });
     }
 
-    // Compare passwords
+
+    
+ 
+     // Log the stored hashed password from the database
+     console.log("Stored password hash: ", user.password);
+
+
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid Password' });
     }
