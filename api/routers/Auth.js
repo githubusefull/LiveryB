@@ -1,7 +1,7 @@
 import express from 'express';
 import User from '../models/Users.js'; // Ensure the schema has a password hashing middleware
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+//import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
@@ -16,14 +16,14 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    //const salt = await bcrypt.genSalt(10);
+    //const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create a new user
     const newUser = new User({
       fullname,
       email,
-      password: hashedPassword,
+      password,
       address,
       mobile,
       role,
@@ -66,14 +66,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid Email' });
     }
 
-
-    
- 
-     // Log the stored hashed password from the database
-     console.log("Stored password hash: ", user.password);
-
-
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = password === user.password;
 
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid Password' });
