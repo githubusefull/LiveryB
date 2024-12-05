@@ -48,6 +48,18 @@ router.post('/create', async (req, res) => {
   }
 });
 
+router.get('/create/:id', async (req, res) => {
+  const { id } = req.params; // Extract the ID from the URL
+  try {
+    const order = await NewOrder.findById(id); // Find order by ID
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found.' }); // If order not found, send a 404 response
+    }
+    res.json(order); // Send the order as a JSON response
+  } catch (err) {
+    res.status(500).json({ message: err.message }); // Handle errors
+  }
+});
 
 router.put('/create/:id', async (req, res) => {
   const { id } = req.params; // Order ID
