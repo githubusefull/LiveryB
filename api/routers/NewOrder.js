@@ -65,8 +65,8 @@ router.put('/create/:id', async (req, res) => {
   const { id } = req.params; // Order ID
   const { driverId, name, mobile } = req.body; // Driver information
 
-  if (!drivers || drivers.length !== 2 || !drivers.every(driver => driver.driverId && driver.name && driver.mobile)) {
-    return res.status(400).json({ message: 'Driver information is complete 2 drivers.' });
+  if (!driverId || !name || !mobile) {
+    return res.status(400).json({ message: 'Driver information is incomplete.' });
   }
 
   try {
