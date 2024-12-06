@@ -73,8 +73,9 @@ router.put('/create/:id', async (req, res) => {
     // Use $push to add a new driver to the driverInfo array
     const updatedOrder = await NewOrder.findByIdAndUpdate(
       id,
+          //$push to add multi drivers 
       {
-        $push: {
+        $set: {
           driverInfo: { driverId, name, mobile },
         },
       },
