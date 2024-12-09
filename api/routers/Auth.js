@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Register a new user
 router.post('/register', async (req, res) => {
-  const { fullname, email, password, address, mobile, role } = req.body;
+  const { fullname, email, password, address, mobile, role, location } = req.body;
 
   try {
     // Check if user already exists
@@ -27,6 +27,7 @@ router.post('/register', async (req, res) => {
       address,
       mobile,
       role,
+      location
     });
 
     // Save the user to the database
@@ -84,5 +85,35 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+
+// Update user's location
+router.post('/location', async (req, res) => {
+  const { userId, location } = req.body;
+
+  try {
+    // Validate input
+    if (!userId || !location) {
+      return res.status(400).json({ message: 'User ID and location are required' });
+    }
+
+    // Find the user and update the location
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { location },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Location updated successfully', user: updatedUser });
+  } catch (err) {
+    console.error('Error updating location:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 export default router;
