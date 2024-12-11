@@ -46,6 +46,19 @@ router.post('/register', async (req, res) => {
   }
 });
 
+router.get('/register/:id', async (req, res) => {
+  const { id } = req.params; // Extract the ID from the URL
+  try {
+    const user = await User.findById(id); // Find order by ID
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' }); // If order not found, send a 404 response
+    }
+    res.json(user); // Send the order as a JSON response
+  } catch (err) {
+    res.status(500).json({ message: err.message }); // Handle errors
+  }
+});
+
 // Retrieve all users
 router.get('/register', async (req, res) => {
   try {
