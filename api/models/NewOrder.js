@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
       driverId: { type: String },
       name: { type: String },
       mobile: { type: String },
+      location: {
+        latitude: Number,
+        longitude: Number,
+      },
       _id : false,
 
     },
