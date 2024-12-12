@@ -63,7 +63,7 @@ router.get('/create/:id', async (req, res) => {
 
 router.put('/create/:id', async (req, res) => {
   const { id } = req.params; // Order ID
-  const { driverId, name, mobile, location , newStatus } = req.body; // Driver information
+  const { driverId, name, mobile, location  } = req.body; // Driver information
 
   if (!driverId || !name || !mobile || !location) {
     return res.status(400).json({ message: 'Driver information is incomplete.' });
@@ -73,8 +73,6 @@ router.put('/create/:id', async (req, res) => {
     // Use $push to add a new driver to the driverInfo array
     const updatedOrder = await NewOrder.findByIdAndUpdate(
       id,
-      { status: newStatus },
- 
       {
         $set: {
           driverInfo: { driverId, name, mobile, location },
@@ -91,6 +89,31 @@ router.put('/create/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error updating driver info.', error: error.message });
   }
+  router.put('/create/:id', async (req, res) => {
+    const { id } = req.params; // Order ID
+    const { newStatus } = req.body; // Status to update
+  
+    if (!newStatus) {
+      return res.status(400).json({ message: 'New status is required.' });
+    }
+  
+    try {
+      const updatedOrder = await NewOrder.findByIdAndUpdate(
+        id,
+        { status: newStatus },
+        { new: true, runValidators: true } 
+      );
+  
+      if (!updatedOrder) {
+        return res.status(404).json({ message: 'Order not found.' });
+      }
+  
+      res.status(200).json({ message: 'Order status updated successfully.', data: updatedOrder });
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating order status.', error: error.message });
+    }
+  });
+  
 });
 
 export default router;
