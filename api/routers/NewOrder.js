@@ -88,7 +88,7 @@ router.put('/create/:id', async (req, res) => {
   }
 
 
-  router.put('/create/:id', async (req, res) => {
+  router.put('/status/:id', async (req, res) => {
     const { id } = req.params; // Order ID
     const { newStatus } = req.body; // Status to update
   
