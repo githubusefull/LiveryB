@@ -63,7 +63,7 @@ router.get('/create/:id', async (req, res) => {
 
 router.put('/create/:id', async (req, res) => {
   const { id } = req.params; // Order ID
-  const { driverId, name, mobile, location } = req.body; // Driver information
+  const { driverId, name, mobile, location , newStatus } = req.body; // Driver information
 
   if (!driverId || !name || !mobile || !location) {
     return res.status(400).json({ message: 'Driver information is incomplete.' });
@@ -73,7 +73,8 @@ router.put('/create/:id', async (req, res) => {
     // Use $push to add a new driver to the driverInfo array
     const updatedOrder = await NewOrder.findByIdAndUpdate(
       id,
-          //$push to add multi drivers 
+      { status: newStatus },
+ 
       {
         $set: {
           driverInfo: { driverId, name, mobile, location },
