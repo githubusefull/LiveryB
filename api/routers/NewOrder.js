@@ -3,7 +3,6 @@ import NewOrder from '../models/NewOrder.js'; // Add the .js extension for ES mo
 
 const router = express.Router();
 
-// GET: Retrieve all orders
 router.get('/create', async (req, res) => {
   try {
     const orders = await NewOrder.find(); // Retrieve all orders from the database
@@ -13,8 +12,6 @@ router.get('/create', async (req, res) => {
   }
 });
 
-// POST: Create a new order
-// POST: Create a new order
 router.post('/create', async (req, res) => {
   const { 
     userId, 
@@ -89,6 +86,8 @@ router.put('/create/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error updating driver info.', error: error.message });
   }
+
+
   router.put('/create/:id', async (req, res) => {
     const { id } = req.params; // Order ID
     const { newStatus } = req.body; // Status to update
