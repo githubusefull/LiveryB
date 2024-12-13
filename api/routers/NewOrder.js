@@ -90,16 +90,16 @@ router.put('/create/:id', async (req, res) => {
 
   router.put('/status/:id', async (req, res) => {
     const { id } = req.params; // Order ID
-    const { newStatus } = req.body; // Status to update
+    const { status } = req.body; // Status to update
   
-    if (!newStatus) {
+    if (!status) {
       return res.status(400).json({ message: 'New status is required.' });
     }
   
     try {
       const updatedOrder = await NewOrder.findByIdAndUpdate(
         id,
-        { status: newStatus },
+        { status: status },
         { new: true, runValidators: true } 
       );
   
