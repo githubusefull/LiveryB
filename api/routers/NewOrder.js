@@ -1,17 +1,19 @@
 import express from 'express';
-import NewOrder from '../models/NewOrder.js'; // Add the .js extension for ES module compatibility
+import NewOrder from '../models/NewOrder.js'; // Ensure .js extension for ES module compatibility
 
 const router = express.Router();
 
+// Fetch all orders
 router.get('/create', async (req, res) => {
   try {
-    const orders = await NewOrder.find(); // Retrieve all orders from the database
-    res.json(orders); // Send orders as a JSON response
+    const orders = await NewOrder.find(); // Retrieve all orders
+    res.json(orders);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
+// Create a new order
 router.post('/create', async (req, res) => {
   const { 
     userId, 
@@ -22,7 +24,7 @@ router.post('/create', async (req, res) => {
     From, 
     To, 
     status, 
-    driverInfo // Expecting an array of objects for driverInfo
+    driverInfo 
   } = req.body;
 
   const newOrder = new NewOrder({
@@ -34,48 +36,48 @@ router.post('/create', async (req, res) => {
     From,
     To,
     status,
-    driverInfo, // Directly assign driverInfo from the request body
+    driverInfo,
   });
 
   try {
-    const savedOrder = await newOrder.save(); // Save the new order to the database
-    res.status(201).json(savedOrder); // Send the created order as a JSON response
+    const savedOrder = await newOrder.save();
+    res.status(201).json(savedOrder);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
+// Fetch a single order by ID
 router.get('/create/:id', async (req, res) => {
-  const { id } = req.params; // Extract the ID from the URL
+  const { id } = req.params;
+
   try {
-    const order = await NewOrder.findById(id); // Find order by ID
+    const order = await NewOrder.findById(id);
     if (!order) {
-      return res.status(404).json({ message: 'Order not found.' }); // If order not found, send a 404 response
+      return res.status(404).json({ message: 'Order not found.' });
     }
-    res.json(order); // Send the order as a JSON response
+    res.json(order);
   } catch (err) {
-    res.status(500).json({ message: err.message }); // Handle errors
+    res.status(500).json({ message: err.message });
   }
 });
 
+// Update driver info
 router.put('/create/:id', async (req, res) => {
-  const { id } = req.params; // Order ID
-  const { driverId, name, mobile, location  } = req.body; // Driver information
+  const { id } = req.params;
+  const { driverId, name, mobile, location } = req.body;
 
   if (!driverId || !name || !mobile || !location) {
     return res.status(400).json({ message: 'Driver information is incomplete.' });
   }
 
   try {
-    // Use $push to add a new driver to the driverInfo array
     const updatedOrder = await NewOrder.findByIdAndUpdate(
       id,
-      {
-        $set: {
-          driverInfo: { driverId, name, mobile, location },
-        },
+      { 
+        $set: { driverInfo: { driverId, name, mobile, location } },
       },
-      { new: true, runValidators: true } // Return the updated document
+      { new: true, runValidators: true }
     );
 
     if (!updatedOrder) {
@@ -86,33 +88,32 @@ router.put('/create/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error updating driver info.', error: error.message });
   }
+});
 
+// Update order status
+router.put('/status/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
 
-  router.put('/status/:id', async (req, res) => {
-    const { id } = req.params; // Order ID
-    const { status } = req.body; // Status to update
-  
-    if (!status) {
-      return res.status(400).json({ message: 'New status is required.' });
+  if (!status) {
+    return res.status(400).json({ message: 'New status is required.' });
+  }
+
+  try {
+    const updatedOrder = await NewOrder.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found.' });
     }
-  
-    try {
-      const updatedOrder = await NewOrder.findByIdAndUpdate(
-        id,
-        { status: status },
-        { new: true, runValidators: true } 
-      );
-  
-      if (!updatedOrder) {
-        return res.status(404).json({ message: 'Order not found.' });
-      }
-  
-      res.status(200).json({ message: 'Order status updated successfully.', data: updatedOrder });
-    } catch (error) {
-      res.status(500).json({ message: 'Error updating order status.', error: error.message });
-    }
-  });
-  
+
+    res.status(200).json({ message: 'Order status updated successfully.', data: updatedOrder });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating order status.', error: error.message });
+  }
 });
 
 export default router;
